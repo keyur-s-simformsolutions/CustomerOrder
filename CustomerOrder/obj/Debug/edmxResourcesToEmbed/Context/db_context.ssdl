@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="db_customerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Agents">
+    <Key>
+      <PropertyRef Name="AgentCode" />
+    </Key>
+    <Property Name="AgentCode" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="AgentName" Type="nvarchar(max)" />
+    <Property Name="WorkingArea" Type="nvarchar" MaxLength="50" />
+    <Property Name="Commission" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="PhoneNo" Type="nchar" MaxLength="10" />
+    <Property Name="Country" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="Customer">
+    <Key>
+      <PropertyRef Name="CustomerCode" />
+    </Key>
+    <Property Name="CustomerCode" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FirstName" Type="nvarchar(max)" />
+    <Property Name="LastName" Type="nvarchar(max)" />
+    <Property Name="CustomerCity" Type="nvarchar(max)" />
+    <Property Name="WorkingArea" Type="nvarchar(max)" />
+    <Property Name="CustomerCountry" Type="nvarchar(max)" />
+    <Property Name="Grade" Type="nvarchar(max)" />
+    <Property Name="OpeningAmount" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="ReceivingAmount" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="PaymentAmount" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="OutstandingAmount" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="PhoneNo" Type="varchar" MaxLength="10" />
+    <Property Name="AgentCode" Type="int" />
+  </EntityType>
+  <EntityType Name="Orders">
+    <Key>
+      <PropertyRef Name="OrderNum" />
+    </Key>
+    <Property Name="OrderNum" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="OrderAmount" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="AdvanceAmount" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="OrderDate" Type="date" />
+    <Property Name="CustomerCode" Type="int" Nullable="false" />
+    <Property Name="OrderDescription" Type="nvarchar(max)" />
+  </EntityType>
+  <Association Name="FK_Customer_ToTable">
+    <End Role="Agents" Type="Self.Agents" Multiplicity="0..1" />
+    <End Role="Customer" Type="Self.Customer" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Agents">
+        <PropertyRef Name="AgentCode" />
+      </Principal>
+      <Dependent Role="Customer">
+        <PropertyRef Name="AgentCode" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Orders_ToTable">
+    <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+    <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customer">
+        <PropertyRef Name="CustomerCode" />
+      </Principal>
+      <Dependent Role="Orders">
+        <PropertyRef Name="CustomerCode" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="db_customerModelStoreContainer">
+    <EntitySet Name="Agents" EntityType="Self.Agents" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Customer_ToTable" Association="Self.FK_Customer_ToTable">
+      <End Role="Agents" EntitySet="Agents" />
+      <End Role="Customer" EntitySet="Customer" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Orders_ToTable" Association="Self.FK_Orders_ToTable">
+      <End Role="Customer" EntitySet="Customer" />
+      <End Role="Orders" EntitySet="Orders" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
