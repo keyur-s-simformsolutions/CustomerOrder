@@ -26,6 +26,7 @@ namespace CustomerOrder.Context
         }
     
         public virtual DbSet<Agent> Agents { get; set; }
+        public virtual DbSet<City> Cities { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
     }

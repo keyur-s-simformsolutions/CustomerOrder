@@ -16,46 +16,81 @@ namespace CustomerOrder.Controllers
         {
             return View();
         }
-        public ActionResult AddCustomer()
+        public ActionResult AddCustomer(int id)
         {
-            return View();
+                IEnumerable<SelectListItem> cities = _context.Cities.Select(city => new SelectListItem
+            {
+                Value = city.Name.ToString(),
+                Text = city.Name
+
+            });
+            Customer c = new Customer()
+            {
+                cities = cities
+            };
+            c.AgentCode = id;
+      
+            return View(c);
         }
         [HttpPost]
         public ActionResult AddCustomer(Customer customer)
         {
-            _context.Database.ExecuteSqlCommand("exec InsertCustomer @FirstName,@Lastname,@CustomerCity ,@WorkingArea,@Grade,@OpeningAmount,@ReceivingAmount,@PaymentAmount,@OutstandingAmount,@Phone",
-
+            _context.Database.ExecuteSqlCommand("exec InsertUpdateCustomer @CustomerCode, @FirstName,@Lastname,@CustomerCity ,@WorkingArea,@CustomerCountry,@Grade,@OpeningAmount,@Phone,@AgentCode",
+                new SqlParameter("@CustomerCode", customer.CustomerCode),
                 new SqlParameter("@FirstName", customer.FirstName),
                 new SqlParameter("@LastName", customer.LastName),
-                new SqlParameter("@CustomerCity", customer.CustomerCountry),
+                new SqlParameter("@CustomerCity", customer.CustomerCity),
                 new SqlParameter("@WorkingArea", customer.WorkingArea),
+                new SqlParameter("@CustomerCountry", customer.CustomerCountry),
                 new SqlParameter("@Grade", customer.Grade),
                 new SqlParameter("@OpeningAmount", customer.OpeningAmount),
-                new SqlParameter("@ReceivingAmount", customer.ReceivingAmount),
-                new SqlParameter("@PaymentAmount", customer.PaymentAmount),
-                new SqlParameter("@OutstandingAmount", customer.OutstandingAmount),
-                new SqlParameter("@Phone", customer.PhoneNo));
-            return RedirectToAction("Index");
+                //new SqlParameter("@ReceivingAmount", customer.ReceivingAmount),
+                //new SqlParameter("@PaymentAmount", customer.PaymentAmount),
+                //new SqlParameter("@OutstandingAmount", customer.OutstandingAmount),
+                new SqlParameter("@Phone", customer.PhoneNo),
+                new SqlParameter("@AgentCode", customer.AgentCode));
+            TempData["message"] = "Added";
+
+            return RedirectToAction("ListCustomer");
         }
-        public ActionResult AddAgent()
+      public ActionResult ListCustomer()
         {
-            return View();
+
+            List<Customer> CustomerList = _context.Database.SqlQuery<Customer>
+         ("exec GetData_Customer").ToList<Customer>();
+            return View(CustomerList);
         }
-        [HttpPost]
-        public ActionResult AddAgent(Agent agent)
+        public ActionResult Edit(int? id)
         {
-            _context.Database.ExecuteSqlCommand("exec InsertAgent @AgentName, @WorkingArea,@Commission,@PhoneNo,@Country",
-                new SqlParameter("@AgentName", agent.AgentName),
-                new SqlParameter("@WorkingArea", agent.WorkingArea),
-                new SqlParameter("@Commission", agent.Commission),
-                new SqlParameter("@PhoneNo", agent.PhoneNo),
-                new SqlParameter("@Country", agent.Country));
+            var parameters = new List<object>();
+            IEnumerable<SelectListItem> cities = _context.Cities.Select(c => new SelectListItem
+            {
+                Value = c.CityId.ToString(),
+                Text = c.Name
+
+            });
+
+            Customer model = new Customer();
 
 
+            if (id == null)
+            {
+                return View("Create", model);
+            }
+            else
+            {
 
-                
-            return View();
+                model = _context.Database.SqlQuery<Customer>("exec GetById_Customer @CustomerCode ", new SqlParameter("@CustomerCode", id)).FirstOrDefault();
+            }
+            model.cities = cities;
+            return View("AddCustomer", model);
+
         }
+        public ActionResult Delete(int id)
+        {
+            _context.Database.ExecuteSqlCommand("exec Delete_Customer @CustomerCode", new SqlParameter("@CustomerCode", id));
+            return RedirectToAction("ListCustomer");
 
+        }
     }
 }

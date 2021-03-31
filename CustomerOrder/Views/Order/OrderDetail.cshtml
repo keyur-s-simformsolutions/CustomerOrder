@@ -1,0 +1,104 @@
+﻿@model IEnumerable<CustomerOrder.ViewModel.OrderViewModel>
+
+@{
+    ViewBag.Title = "OrderDetail";
+}
+
+<h2>ListOrder</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        @*<th>
+                @Html.DisplayNameFor(model => model.OrderNum)
+            </th>*@
+        <th>
+            @Html.DisplayNameFor(model => model.CustomerName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CustomerCity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OrderDate)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.AdvanceAmount)
+        </th>
+        @*<th>
+                @Html.DisplayNameFor(model => model.ReceivingAmount)
+            </th>*@
+        @*<th>
+                @Html.DisplayNameFor(model => model.OrderDescription)
+            </th>*@
+        <th>
+            @Html.DisplayNameFor(model => model.AgentName)
+        </th>
+
+        <th>Action</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            @*<td>
+                    @Html.DisplayFor(modelItem => item.OrderNum)
+                </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerCity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderDate)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.AdvanceAmount)
+            </td>
+            @*<td>
+                    @Html.DisplayFor(modelItem => item.ReceivingAmount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OrderDescription)
+                </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.AgentName)
+            </td>
+            <td>
+                @Html.ActionLink("Delete", "Delete", new { id = item.OrderNum },
+                            new { onclick = "return confirm('Are you sure?');" }) |
+                @Html.ActionLink("Edit", "Edit", new { id = item.OrderNum })
+
+
+            </td>
+        </tr>
+    }
+
+</table>
+<table cellpadding="0" cellspacing="0">
+    <tr>
+
+        @for (int i = 1; i <= @ViewBag.TotalPages; i++)
+        {
+
+            <td>
+                @if (i != @ViewBag.CurrPage)
+                {
+                    <a class="pages btn btn-default" href="javascript:Goto(@i);">@i</a>
+                }
+                else
+                {
+                    <span class="pages btn btn-primary">@i</span>
+                }
+            </td>
+        }
+    </tr>
+</table>
+<input type="hidden" id="curpageidx" name="cPage" />
+<script>
+
+</script>

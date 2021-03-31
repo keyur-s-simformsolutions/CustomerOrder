@@ -11,7 +11,9 @@ namespace CustomerOrder.Context
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations.Schema;
+    using System.Web.Mvc;
+
     public partial class Customer
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -33,7 +35,8 @@ namespace CustomerOrder.Context
         public Nullable<decimal> OutstandingAmount { get; set; }
         public string PhoneNo { get; set; }
         public Nullable<int> AgentCode { get; set; }
-    
+        [NotMapped]
+        public IEnumerable<SelectListItem> cities { get; set; }
         public virtual Agent Agent { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Order> Orders { get; set; }

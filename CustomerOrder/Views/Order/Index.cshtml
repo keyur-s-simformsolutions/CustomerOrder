@@ -1,0 +1,66 @@
+﻿@model CustomerOrder.ViewModel.FilterSearch
+@{
+    ViewBag.Title = "Index";
+}
+@*<div class="row ">
+        <div class="col">
+            <div class=" col-md-2">
+                <a href="@Url.Action("EmpForm","Employee")" class="btn btn-primary">Add Employee</a>
+            </div>
+        </div>
+        <div class="col" style="float:right;">
+            <div class=" col-md-1">
+                <a href="@Url.Action("Work","Employee")" class="btn btn-primary">Add Working Logs</a>
+            </div>
+        </div>
+    </div>*@
+<div class="col-sm-10"><br /></div>
+<div class="filters row col-md-12">
+    <div class="col">
+        <div class="col-md-2">
+            @Html.EditorFor(model => model.Search, new { htmlAttributes = new { @placeholder = "Search", @class = "form-control" } })
+        </div>
+    </div>
+ 
+    <div class="col">
+        <div class="col-md-2">
+            @Html.DropDownListFor(model => model.CityName, new SelectList(Model.Cities, "Value", "Text"), "--Select City--", new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="col">
+        <div class="col-md-2">
+            @Html.TextBoxFor(model => model.Sdate, new { @max = DateTime.Now.Date.ToString("yyyy-MM-dd"), @placeholder = "SDate", @type = "date", @class = "form-control" })
+        </div>
+    </div>
+    <div class="col">
+        <div class="col-md-2">
+            @Html.TextBoxFor(model => model.Edate, new { @type = "date", @class = "form-control datepicker" })
+        </div>
+    </div>
+    <div class="col">
+        <div class=" col-md-1">
+            <input type="button" value="Search" class="btn btn-primary search-btn" />
+        </div>
+    </div>
+    <div class="col">
+        <div class=" col-md-1">
+            <input type="button" value="Clear" class="btn btn-danger clear-btn" />
+        </div>
+    </div>
+
+</div>
+<br />
+<div class="datadiv">
+    <br />
+    @{Html.RenderAction("ListOrder", "Order", new
+        {
+
+            search = Model.Search,
+          
+            cityname = Model.CityName,
+            sdate = Model.Sdate,
+            edate = Model.Edate
+        });
+    }
+
+</div>

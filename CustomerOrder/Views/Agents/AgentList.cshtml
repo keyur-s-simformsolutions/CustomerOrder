@@ -1,0 +1,68 @@
+﻿@model IEnumerable<CustomerOrder.Context.Agent>
+
+@{
+    ViewBag.Title = "AgentList";
+}
+
+<h2>AgentList</h2>
+
+<p>
+    @Html.ActionLink("Create New", "AddAgent")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.AgentName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.WorkingArea)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Commission)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PhoneNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Country)
+        </th>
+        <th>
+            Customer
+        </th>
+        <th>Action</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.AgentName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WorkingArea)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Commission)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhoneNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Country)
+            </td>
+            <td>
+                @Html.ActionLink("List Customer", "ListCustomer", "Customer", new { id = item.AgentCode }, null) |
+
+                @Html.ActionLink("Create Customer", "AddCustomer", "Customer", new { id = item.AgentCode }, null)
+            </td>
+                <td >
+                @Html.ActionLink("Edit", "Edit", new { id = item.AgentCode }) |
+                @*@Html.ActionLink("Details", "Details", new { id = item.AgentCode }) |*@
+                @Html.ActionLink("Delete", "Delete", new { id = item.AgentCode },
+                new { onclick = "return confirm('Are you sure?');" }) 
+            
+            </td>
+        </tr>
+    }
+
+</table>
